@@ -1,0 +1,85 @@
+[gd_scene load_steps=12 format=3 uid="uid://dv6grajywe2xx"]
+
+[ext_resource type="Script" path="res://scenes/plane/plane.gd" id="1_jgpdr"]
+[ext_resource type="Texture2D" uid="uid://b6int24p6i1yq" path="res://assets/plane/planes_sheet.png" id="1_v3nl5"]
+[ext_resource type="AudioStream" uid="uid://2m61w0dr1ter" path="res://assets/audio/engine.mp3" id="3_4c36h"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wukdr"]
+atlas = ExtResource("1_v3nl5")
+region = Rect2(0, 0, 88, 73)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5fa8d"]
+atlas = ExtResource("1_v3nl5")
+region = Rect2(88, 0, 88, 73)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k6kow"]
+atlas = ExtResource("1_v3nl5")
+region = Rect2(176, 0, 88, 73)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_f4dfu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wukdr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5fa8d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k6kow")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 10.0
+}]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_cgxqa"]
+radius = 29.0
+
+[sub_resource type="Animation" id="Animation_00xs0"]
+length = 0.001
+
+[sub_resource type="Animation" id="Animation_0w3us"]
+resource_name = "power"
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("AnimatedSprite2D:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [0.0, -0.349066, 0.0]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_dki23"]
+_data = {
+"RESET": SubResource("Animation_00xs0"),
+"power": SubResource("Animation_0w3us")
+}
+
+[node name="Plane" type="CharacterBody2D" groups=["player"]]
+collision_mask = 2
+script = ExtResource("1_jgpdr")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(0.75, 0.75)
+sprite_frames = SubResource("SpriteFrames_f4dfu")
+animation = &"fly"
+autoplay = "fly"
+frame_progress = 0.379485
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_cgxqa")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_dki23")
+}
+
+[node name="EngineSound" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("3_4c36h")
+autoplay = true

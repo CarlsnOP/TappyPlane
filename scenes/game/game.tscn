@@ -1,0 +1,48 @@
+[gd_scene load_steps=9 format=3 uid="uid://u8e4l3ibwoa8"]
+
+[ext_resource type="Texture2D" uid="uid://b7700wfwkuln0" path="res://assets/background/rocks_2.png" id="1_flfyf"]
+[ext_resource type="Script" path="res://scenes/game/game.gd" id="1_pu1to"]
+[ext_resource type="PackedScene" uid="uid://dv6grajywe2xx" path="res://scenes/plane/plane.tscn" id="2_l7lrb"]
+[ext_resource type="PackedScene" uid="uid://dnmt7mi07mm6h" path="res://scenes/barrier/barrier.tscn" id="3_f2gqj"]
+[ext_resource type="PackedScene" uid="uid://xupt5w8y4tnj" path="res://scenes/pipes/pipes.tscn" id="4_ovv8m"]
+[ext_resource type="PackedScene" uid="uid://cjt7ju2t35tbw" path="res://scenes/hud/hud.tscn" id="6_rqcmm"]
+[ext_resource type="PackedScene" uid="uid://bphs720q2wlx2" path="res://scenes/game_over/game_over.tscn" id="7_lsr8l"]
+[ext_resource type="PackedScene" uid="uid://bjhumekoc7q40" path="res://scenes/scrolling_bg/scrolling_bg.tscn" id="8_7ykwo"]
+
+[node name="Game" type="Node2D"]
+script = ExtResource("1_pu1to")
+pipes_scene = ExtResource("4_ovv8m")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(264, 346)
+texture = ExtResource("1_flfyf")
+
+[node name="Plane" parent="." instance=ExtResource("2_l7lrb")]
+position = Vector2(68, 456)
+
+[node name="Barrier" parent="." instance=ExtResource("3_f2gqj")]
+position = Vector2(-1, 858)
+
+[node name="Barrier2" parent="." instance=ExtResource("3_f2gqj")]
+position = Vector2(-1, -24)
+
+[node name="SpawnUpper" type="Marker2D" parent="."]
+position = Vector2(540, 340)
+
+[node name="SpawnLower" type="Marker2D" parent="."]
+position = Vector2(540, 540)
+
+[node name="SpawnTimer" type="Timer" parent="."]
+wait_time = 1.2
+autostart = true
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Hud" parent="CanvasLayer" instance=ExtResource("6_rqcmm")]
+
+[node name="GameOver" parent="CanvasLayer" instance=ExtResource("7_lsr8l")]
+
+[node name="ScrollingBg" parent="." instance=ExtResource("8_7ykwo")]
+
+[connection signal="timeout" from="SpawnTimer" to="." method="_on_spawn_timer_timeout"]
